@@ -5,6 +5,7 @@
 //      伊地田真衣
 //  【開発履歴】
 //      2022/06/09 作成
+//      2022/06/10 基本のウィンドウ表示、コメント追加
 //
 //********************************************************************************************:
 
@@ -45,7 +46,7 @@ int main(int, char**) {
     }
 
     /*
-     *  OpenGLのバージョンやプロファイルを指定してウィンドウを作成します
+     *  OpenGLのバージョンやプロファイルを指定してウィンドウを作成する
      *  これはglfwCreateWindow()でウィンドウを作成する前に、glfwWindowHint()関数を用いて行う
      */
     const char* glsl_version = "#version 130";
@@ -72,6 +73,8 @@ int main(int, char**) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);    // ウィンドウカラー初期値
+
     // glfwWindowShouldClose...ウィンドウが開いている間繰り返し描画する
     while (!glfwWindowShouldClose(window)) {
         /*
@@ -93,7 +96,8 @@ int main(int, char**) {
         ImGui::NewFrame();
 
 
-        ImGui::Begin("Hello world");
+        ImGui::Begin("WindowColorTest");
+        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
         ImGui::End();
 
 
@@ -101,7 +105,7 @@ int main(int, char**) {
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(0.8f, 0.8f, 0.8f, 0.0f);   // 背景色の指定
+        glClearColor(clear_color.x*clear_color.w, clear_color.y*clear_color.w, clear_color.z*clear_color.w, clear_color.w);   // 背景色の指定
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 画面消去
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
